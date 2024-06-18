@@ -1,0 +1,1 @@
+We will build a network of Pyramidal cell and OLM (Somatostatin positive) interneurons from CA3 to study how mutual inhibition among the dendrite-targeting interneurons can potentially channel the flow of information in a recurrent network.
