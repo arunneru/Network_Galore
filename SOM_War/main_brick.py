@@ -392,7 +392,8 @@ def setup_clamps(cell_list, sim_dur=5000):
 def many_simulations( cin_wfac = cin_wfac, dep_gaba_tau = dep_gaba_tau):
 
     
-    tstop = 5000
+    tstop = 8000
+    print("tsop was chosen to be: ",8000)
     sim_num = 10
     rate_spike_drive = 0.01
 
@@ -428,7 +429,7 @@ def brick_simulation(tstop, sim_num, rate_spike_drive, prb_ext_drive = 0.1, weig
     
 
     print("Running simulation .. ")
-    RunSim(tstop=tstop, dt=dt)
+    RunSim(tstop=tstop, dt=0.01)
     print("End of simulation. ")
 
     # save spike trains
@@ -447,9 +448,9 @@ def brick_simulation(tstop, sim_num, rate_spike_drive, prb_ext_drive = 0.1, weig
     # with open('output_ifile.txt', 'wb') as fp:
     #     pickle.dump(out_idata, fp) # use `pickle.loads` to do the reverse
     
-    with open('output_vfile_dinr_{:3.1f}gabaTau_{:6.2f}cinWf_noain.txt'.format(dep_gaba_t, cin_wf), 'wb') as fp:
+    with open('output_vfile_dinr_{:3.1f}gabaTau_{:6.2f}cinWf.txt'.format(dep_gaba_t, cin_wf), 'wb') as fp:
         pickle.dump(out_vdata, fp) # use `pickle.loads` to do the reverse
-    with open('output_vfile_cin_{:3.1f}gabaTau_{:6.2f}cinWf_noain.txt'.format(dep_gaba_t, cin_wf), 'wb') as fp:
+    with open('output_vfile_cin_{:3.1f}gabaTau_{:6.2f}cinWf.txt'.format(dep_gaba_t, cin_wf), 'wb') as fp:
         pickle.dump(out_vdata_cin, fp) # use `pickle.loads` to do the reverse
     # with open('output_vfile_ain.txt', 'wb') as fp:
     #     pickle.dump(out_vdata_ain, fp) # use `pickle.loads` to do the reverse
@@ -469,12 +470,24 @@ def RunSim(v_init=-80.0,tstop=0.0,dt=0.01):
     h.dt = dt
     h.t = 0.0
     counter=0
+    
     h.finitialize(v_init)
+    # ss = h.SaveState()
+    # sf = h.File("state_saved.bin")
+    # ss.fread(sf)
+    # ss.restore(1)
+
     while h.t<tstop:
         counter += 1
-        print("here: ", counter)
+        # print("here: ", counter)
         h.fadvance()
-        
+    ss = h.SaveState()
+    ss.save()
+    
+    sf = h.File("state_saved.bin")
+    ss.fwrite(sf)
 
-many_simulations( cin_wfac = cin_wfac, dep_gaba_tau = dep_gaba_tau)
+
+# many_simulations( cin_wfac = cin_wfac, dep_gaba_tau = dep_gaba_tau)
+
 
